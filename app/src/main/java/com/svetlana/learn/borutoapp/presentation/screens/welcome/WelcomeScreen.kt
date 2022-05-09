@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
@@ -18,17 +17,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.*
 import com.svetlana.learn.borutoapp.R
 import com.svetlana.learn.borutoapp.domain.model.OnBoardingPage
+import com.svetlana.learn.borutoapp.navigation.Screen
 import com.svetlana.learn.borutoapp.ui.theme.*
 import com.svetlana.learn.borutoapp.util.Constants.LAST_ON_BOARDING_PAGE
 import com.svetlana.learn.borutoapp.util.Constants.ON_BOARDING_PAGE_COUNT
 
 @ExperimentalPagerApi
 @Composable
-fun WelcomeScreen(navController: NavHostController) {
+fun WelcomeScreen(
+    navController: NavHostController,
+    welcomeViewModel: WelcomeViewModel = hiltViewModel()
+) {
     val pages = listOf(
         OnBoardingPage.First,
         OnBoardingPage.Second,
@@ -63,8 +67,11 @@ fun WelcomeScreen(navController: NavHostController) {
         FinishButton(
             modifier = Modifier
                 .weight(1f),
-            pagerState = pagerState) {
-            
+            pagerState = pagerState
+        ) {
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
+            welcomeViewModel.saveOnBoardingState(completed = true)
         }
     }
 }
