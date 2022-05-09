@@ -2,6 +2,9 @@ package com.svetlana.learn.borutoapp.util
 
 object Constants {
 
+    const val BASE_URL = "http://127.0.0.1:8080"
+
+
     const val DETAILS_ARGUMENT_KEY = "heroId"
 
     const val BORUTO_DATABASE = "boruto_database"
