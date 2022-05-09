@@ -5,6 +5,7 @@ import com.svetlana.learn.borutoapp.data.repository.DataStoreOperationsImpl
 import com.svetlana.learn.borutoapp.data.repository.Repository
 import com.svetlana.learn.borutoapp.domain.repository.DataStoreOperations
 import com.svetlana.learn.borutoapp.domain.use_cases.UseCases
+import com.svetlana.learn.borutoapp.domain.use_cases.get_all_heroes.GetAllHeroesUseCase
 import com.svetlana.learn.borutoapp.domain.use_cases.read_onboarding.ReadOnBoardingUseCase
 import com.svetlana.learn.borutoapp.domain.use_cases.save_onboarding.SaveOnBoardingUseCase
 import dagger.Module
@@ -31,7 +32,8 @@ object RepositoryModule {
     fun provideUseCases(repository: Repository): UseCases{
         return UseCases(
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository),
-            readOnBoardingUseCase = ReadOnBoardingUseCase(repository)
+            readOnBoardingUseCase = ReadOnBoardingUseCase(repository),
+            getAllHeroesUseCase = GetAllHeroesUseCase(repository)
         )
     }
 }
