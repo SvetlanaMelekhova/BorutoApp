@@ -1,4 +1,4 @@
-package com.svetlana.learn.borutoapp.data.pref
+package com.svetlana.learn.borutoapp.data.repository
 
 import android.content.Context
 import androidx.datastore.core.DataStore
