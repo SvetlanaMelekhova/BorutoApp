@@ -1,4 +1,4 @@
-package com.svetlana.learn.borutoapp.presentation.common
+package com.svetlana.learn.borutoapp.presentation.components
 
 import android.content.res.Configuration
 import androidx.compose.animation.core.*
@@ -13,9 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.ui.theme.*
 
 @Composable
