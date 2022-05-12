@@ -31,6 +31,7 @@ import com.svetlana.learn.borutoapp.R
 import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.navigation.Screen
 import com.svetlana.learn.borutoapp.presentation.components.RatingWidget
+import com.svetlana.learn.borutoapp.presentation.components.ShimmerEffect
 import com.svetlana.learn.borutoapp.ui.theme.*
 import com.svetlana.learn.borutoapp.util.Constants.BASE_URL
 
@@ -85,6 +86,7 @@ fun handlePagingResult(
                 false
             }
             error != null -> {
+                EmptyScreen(error = error)
                 false
             }
             else -> true
