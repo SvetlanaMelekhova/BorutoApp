@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.svetlana.learn.borutoapp.data.local.BorutoDatabase
 import com.svetlana.learn.borutoapp.data.paging_source.HeroRemoteMediator
+import com.svetlana.learn.borutoapp.data.paging_source.SearchHeroesSource
 import com.svetlana.learn.borutoapp.data.remote.BorutoApi
 import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.domain.repository.RemoteDataSource
@@ -32,7 +33,15 @@ class RemoteDataSourceImpl(
         ).flow
     }
 
-    override fun searchHeroes(): Flow<PagingData<Hero>> {
-        TODO("Not yet implemented")
+    override fun searchHeroes(query: String): Flow<PagingData<Hero>> {
+        return Pager(
+            config = PagingConfig(pageSize = ITEMS_PER_PAGE),
+            pagingSourceFactory = {
+                SearchHeroesSource(
+                    borutoApi = borutoApi,
+                    query = query
+                )
+            }
+        ).flow
     }
 }
