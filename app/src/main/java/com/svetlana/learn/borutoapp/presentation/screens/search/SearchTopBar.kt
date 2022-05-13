@@ -43,7 +43,7 @@ fun SearchWidget(
     onSearchClicked: (String) -> Unit,
     onCloseClicked: () -> Unit
 ) {
-    androidx.compose.material.Surface(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
             .height(TOP_APP_BAR_HEIGHT),
@@ -54,7 +54,9 @@ fun SearchWidget(
             modifier = Modifier
                 .fillMaxWidth(),
             value = text,
-            onValueChange = { onTextChanged(it) },
+            onValueChange = {
+                onTextChanged(it)
+            },
             placeholder = {
                 Text(
                     modifier = Modifier
