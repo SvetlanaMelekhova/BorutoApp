@@ -7,14 +7,14 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.domain.use_cases.UseCases
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@ViewModelScoped
+@HiltViewModel
 class SearchViewModel @Inject constructor(
     private val useCases: UseCases
 ) : ViewModel() {
