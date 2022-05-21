@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.svetlana.learn.borutoapp.presentation.details.DetailsScreen
+import com.svetlana.learn.borutoapp.presentation.screens.details.DetailsScreen
 import com.svetlana.learn.borutoapp.presentation.screens.home.HomeScreen
 import com.svetlana.learn.borutoapp.presentation.screens.search.SearchScreen
 import com.svetlana.learn.borutoapp.presentation.screens.splash.SplashScreen
