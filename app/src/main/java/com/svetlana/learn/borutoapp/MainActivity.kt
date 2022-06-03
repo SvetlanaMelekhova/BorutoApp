@@ -3,6 +3,7 @@ package com.svetlana.learn.borutoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
@@ -11,6 +12,7 @@ import com.svetlana.learn.borutoapp.navigation.SetupNavGraph
 import com.svetlana.learn.borutoapp.ui.theme.BorutoAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalMaterialApi
 @ExperimentalCoilApi
 @ExperimentalPagerApi
 @AndroidEntryPoint
