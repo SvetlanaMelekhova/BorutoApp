@@ -1,27 +1,42 @@
 package com.svetlana.learn.borutoapp.presentation.screens.details
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.util.Log
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.BottomSheetValue.Collapsed
+import androidx.compose.material.BottomSheetValue.Expanded
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.svetlana.learn.borutoapp.R
 import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.presentation.components.InfoBox
 import com.svetlana.learn.borutoapp.presentation.components.OrderedList
 import com.svetlana.learn.borutoapp.ui.theme.*
 import com.svetlana.learn.borutoapp.util.Constants
+import com.svetlana.learn.borutoapp.util.Constants.BASE_URL
+import com.svetlana.learn.borutoapp.util.Constants.MIN_BACKGROUND_IMAGE_HEIGHT
 
 @ExperimentalMaterialApi
+@ExperimentalCoilApi
 @Composable
 fun DetailsContent(
     navController: NavHostController,
@@ -32,13 +47,36 @@ fun DetailsContent(
         bottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Expanded)
     )
 
+    val currentSheetFraction = scaffoldState.currentSheetFraction
+
+    val radiusAnim by animateDpAsState(
+        targetValue = if (currentSheetFraction == 1f)
+            EXTRA_LARGE_PADDING
+        else
+            EXPANDED_RADIUS_LEVEL
+    )
+
     BottomSheetScaffold(
+        sheetShape = RoundedCornerShape(
+            topStart = radiusAnim,
+            topEnd = radiusAnim
+        ),
         scaffoldState = scaffoldState,
         sheetPeekHeight = MIN_SHEET_HEIGHT,
         sheetContent = {
             selectedHero?.let { BottomSheetContent(selectedHero = it) }
         },
-        content = {}
+        content = {
+            selectedHero?.let { it1 ->
+                BackgroundContent(
+                    heroImage = it1.image,
+                    imageFraction = currentSheetFraction,
+                    onCloseClicked = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }
     )
 }
 
@@ -143,6 +181,72 @@ fun BottomSheetContent(
         }
     }
 }
+
+@ExperimentalCoilApi
+@Composable
+fun BackgroundContent(
+    heroImage: String,
+    imageFraction: Float = 1f,
+    backgroundColor: Color = MaterialTheme.colors.surface,
+    onCloseClicked: () -> Unit
+) {
+    val imageUrl = "$BASE_URL${heroImage}"
+    val painter = rememberImagePainter(imageUrl) {
+        error(R.drawable.ic_placeholder)
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
+    ) {
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(fraction = imageFraction + MIN_BACKGROUND_IMAGE_HEIGHT)
+                .align(Alignment.TopStart),
+            painter = painter,
+            contentDescription = stringResource(id = R.string.hero_image),
+            contentScale = ContentScale.Crop
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            IconButton(
+                modifier = Modifier.padding(all = SMALL_PADDING),
+                onClick = { onCloseClicked() }
+            ) {
+                Icon(
+                    modifier = Modifier.size(INFO_ICON_SIZE),
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(id = R.string.close_icon),
+                    tint = Color.White
+                )
+            }
+        }
+    }
+}
+
+@ExperimentalMaterialApi
+val BottomSheetScaffoldState.currentSheetFraction: Float
+    get() {
+        val fraction = bottomSheetState.progress.fraction
+        val targetValue = bottomSheetState.targetValue
+        val currentValue = bottomSheetState.currentValue
+
+        Log.d("Fraction", fraction.toString())
+        Log.d("Fraction Target", targetValue.toString())
+        Log.d("Fraction Current", currentValue.toString())
+
+        return when {
+            currentValue == Collapsed && targetValue == Collapsed -> 1f
+            currentValue == Expanded && targetValue == Expanded -> 0f
+            currentValue == Collapsed && targetValue == Expanded -> 1f - fraction
+            currentValue == Expanded && targetValue == Collapsed -> 0f + fraction
+            else -> fraction
+        }
+    }
 
 @Preview
 @Composable
