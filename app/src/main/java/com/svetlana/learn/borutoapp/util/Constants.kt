@@ -3,7 +3,8 @@ package com.svetlana.learn.borutoapp.util
 object Constants {
 
     //const val BASE_URL = "http://10.0.2.2:8080"
-    const val BASE_URL = "http://192.168.50.144:8080"
+    const val BASE_URL = "http://172.20.10.2:8080"
+    //const val BASE_URL = "http://192.168.50.144:8080"
 
 
     const val DETAILS_ARGUMENT_KEY = "heroId"
@@ -19,5 +20,7 @@ object Constants {
     const val LAST_ON_BOARDING_PAGE = 2
 
     const val ITEMS_PER_PAGE = 3
+
+    const val ABOUT_TEXT_MAX_LINES = 7
 
 }
