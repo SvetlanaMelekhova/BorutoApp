@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,7 +27,9 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.svetlana.learn.borutoapp.R
 import com.svetlana.learn.borutoapp.domain.model.Hero
 import com.svetlana.learn.borutoapp.navigation.Screen
@@ -104,10 +107,6 @@ fun HeroItem(
     hero: Hero,
     navController: NavHostController
 ) {
-    val painter = rememberImagePainter(data = "$BASE_URL${hero.image}") {
-        placeholder(R.drawable.ic_placeholder)
-        error(R.drawable.ic_placeholder)
-    }
 
     Box(
         modifier = Modifier
@@ -118,10 +117,14 @@ fun HeroItem(
         contentAlignment = Alignment.BottomStart
     ) {
         Surface(shape = RoundedCornerShape(size = LARGE_PADDING)) {
-            Image(
+            AsyncImage(
                 modifier = Modifier.fillMaxSize(),
-                painter = painter,
-                contentDescription = stringResource(R.string.hero_image),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(data = "$BASE_URL${hero.image}")
+                    .placeholder(drawableResId = R.drawable.ic_placeholder)
+                    .error(drawableResId = R.drawable.ic_placeholder)
+                    .build(),
+                contentDescription = stringResource(id = R.string.hero_image),
                 contentScale = ContentScale.Crop
             )
         }
