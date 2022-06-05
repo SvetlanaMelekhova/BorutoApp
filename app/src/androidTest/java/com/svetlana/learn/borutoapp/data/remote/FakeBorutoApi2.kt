@@ -2,6 +2,7 @@ package com.svetlana.learn.borutoapp.data.remote
 
 import com.svetlana.learn.borutoapp.domain.model.ApiResponse
 import com.svetlana.learn.borutoapp.domain.model.Hero
+import java.io.IOException
 
 class FakeBorutoApi2 : BorutoApi {
 
@@ -15,48 +16,96 @@ class FakeBorutoApi2 : BorutoApi {
         )
     }
 
-    private val page1 = listOf(
+    private var page1 = listOf(
         Hero(
             id = 1,
             name = "Sasuke",
-            image = "",
-            about = "",
-            rating = 4.0,
-            power = 92,
-            month = "",
-            day = "",
-            family = listOf(),
-            abilities = listOf(),
-            natureTypes = listOf()
+            image = "/images/sasuke.jpg",
+            about = "Sasuke Uchiha (うちはサスケ, Uchiha Sasuke) is one of the last surviving members of Konohagakure's Uchiha clan. After his older brother, Itachi, slaughtered their clan, Sasuke made it his mission in life to avenge them by killing Itachi. He is added to Team 7 upon becoming a ninja and, through competition with his rival and best friend, Naruto Uzumaki.",
+            rating = 5.0,
+            power = 98,
+            month = "July",
+            day = "23rd",
+            family = listOf(
+                "Fugaku",
+                "Mikoto",
+                "Itachi",
+                "Sarada",
+                "Sakura"
+            ),
+            abilities = listOf(
+                "Sharingan",
+                "Rinnegan",
+                "Sussano",
+                "Amateratsu",
+                "Intelligence"
+            ),
+            natureTypes = listOf(
+                "Lightning",
+                "Fire",
+                "Wind",
+                "Earth",
+                "Water"
+            )
         ),
         Hero(
             id = 2,
             name = "Naruto",
-            image = "",
-            about = "",
-            rating = 4.5,
-            power = 92,
-            month = "",
-            day = "",
-            family = listOf(),
-            abilities = listOf(),
-            natureTypes = listOf()
+            image = "/images/naruto.jpg",
+            about = "Naruto Uzumaki (うずまきナルト, Uzumaki Naruto) is a shinobi of Konohagakure's Uzumaki clan. He became the jinchūriki of the Nine-Tails on the day of his birth — a fate that caused him to be shunned by most of Konoha throughout his childhood. After joining Team Kakashi, Naruto worked hard to gain the village's acknowledgement all the while chasing his dream to become Hokage.",
+            rating = 5.0,
+            power = 98,
+            month = "Oct",
+            day = "10th",
+            family = listOf(
+                "Minato",
+                "Kushina",
+                "Boruto",
+                "Himawari",
+                "Hinata"
+            ),
+            abilities = listOf(
+                "Rasengan",
+                "Rasen-Shuriken",
+                "Shadow Clone",
+                "Senin Mode"
+            ),
+            natureTypes = listOf(
+                "Wind",
+                "Earth",
+                "Lava",
+                "Fire"
+            )
         ),
         Hero(
             id = 3,
             name = "Sakura",
-            image = "",
-            about = "",
-            rating = 5.0,
+            image = "/images/sakura.jpg",
+            about = "Sakura Uchiha (うちはサクラ, Uchiha Sakura, née Haruno (春野)) is a kunoichi of Konohagakure. When assigned to Team 7, Sakura quickly finds herself ill-prepared for the duties of a shinobi. However, after training under the Sannin Tsunade, she overcomes this, and becomes recognised as one of the greatest medical-nin in the world.",
+            rating = 4.5,
             power = 92,
-            month = "",
-            day = "",
-            family = listOf(),
-            abilities = listOf(),
-            natureTypes = listOf()
+            month = "Mar",
+            day = "28th",
+            family = listOf(
+                "Kizashi",
+                "Mebuki",
+                "Sarada",
+                "Sasuke"
+            ),
+            abilities = listOf(
+                "Chakra Control",
+                "Medical Ninjutsu",
+                "Strength",
+                "Intelligence"
+            ),
+            natureTypes = listOf(
+                "Earth",
+                "Water",
+                "Fire"
+            )
         )
     )
-    private val page2 = listOf(
+    private var page2 = listOf(
         Hero(
             id = 4,
             name = "Boruto",
@@ -133,7 +182,7 @@ class FakeBorutoApi2 : BorutoApi {
             )
         )
     )
-    private val page3 = listOf(
+    private var page3 = listOf(
         Hero(
             id = 7,
             name = "Kawaki",
@@ -206,7 +255,7 @@ class FakeBorutoApi2 : BorutoApi {
             )
         )
     )
-    private val page4 = listOf(
+    private var page4 = listOf(
         Hero(
             id = 10,
             name = "Isshiki",
@@ -280,7 +329,7 @@ class FakeBorutoApi2 : BorutoApi {
             )
         )
     )
-    private val page5 = listOf(
+    private var page5 = listOf(
         Hero(
             id = 13,
             name = "Code",
@@ -347,14 +396,26 @@ class FakeBorutoApi2 : BorutoApi {
         )
     )
 
+    fun clearData() {
+        page1 = emptyList()
+    }
+
+    private var exception = false
+
+    fun addException() {
+        exception = true
+    }
 
     override suspend fun getAllHeroes(page: Int): ApiResponse {
+        if (exception) {
+            throw IOException()
+        }
         require(page in 1..5)
         return ApiResponse(
             success = true,
-            message = "OK",
-            prevPage = calculate(page = page)["PREVIOUS_PAGE"],
-            nextPage = calculate(page = page)["NEXT_PAGE"],
+            message = "ok",
+            prevPage = calculate(page = page)["prevPage"],
+            nextPage = calculate(page = page)["nextPage"],
             heroes = heroes[page]!!
         )
     }
@@ -366,6 +427,9 @@ class FakeBorutoApi2 : BorutoApi {
     }
 
     private fun calculate(page: Int): Map<String, Int?> {
+        if (page1.isEmpty()) {
+            return mapOf("prevPage" to null, "nextPage" to null)
+        }
         var prevPage: Int? = page
         var nextPage: Int? = page
         if (page in 1..4) {
@@ -380,6 +444,6 @@ class FakeBorutoApi2 : BorutoApi {
         if (page == 5) {
             nextPage = null
         }
-        return mapOf("PREVIOUS_PAGE" to prevPage, "NEXT_PAGE" to nextPage)
+        return mapOf("prevPage" to prevPage, "nextPage" to nextPage)
     }
 }
